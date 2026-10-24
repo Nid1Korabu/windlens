@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   Activity,
@@ -10,7 +9,8 @@ import {
 } from "lucide-react";
 import "./App.css";
 
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
 function formatNumber(value) {
   return Number(value).toLocaleString("en-GB", {
@@ -53,14 +53,14 @@ function App() {
       });
 
       const response = await fetch(
-        `${API_BASE_URL}/api/wind/comparison?${params}`
+        `${API_BASE_URL}/api/wind/comparison?${params}`,
       );
 
       const result = await response.json();
 
       if (!response.ok) {
         throw new Error(
-          result.detail || "Unable to load wind generation data."
+          result.detail || "Unable to load wind generation data.",
         );
       }
 
@@ -68,7 +68,7 @@ function App() {
     } catch (err) {
       setError(
         err.message ||
-          "Could not connect to the backend. Check that it is running."
+          "Could not connect to the backend. Check that it is running.",
       );
     } finally {
       setLoading(false);
@@ -80,15 +80,13 @@ function App() {
     setMonthlyError("");
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/wind/monthly`
-      );
+      const response = await fetch(`${API_BASE_URL}/api/wind/monthly`);
 
       const result = await response.json();
 
       if (!response.ok) {
         throw new Error(
-          result.detail || "Unable to load the monthly evaluation."
+          result.detail || "Unable to load the monthly evaluation.",
         );
       }
 
@@ -96,7 +94,7 @@ function App() {
     } catch (err) {
       setMonthlyError(
         err.message ||
-          "Could not connect to the backend. Check that it is running."
+          "Could not connect to the backend. Check that it is running.",
       );
     } finally {
       setMonthlyLoading(false);
@@ -105,10 +103,7 @@ function App() {
 
   const maximumDailyMae =
     monthlyData?.dailyResults?.length > 0
-      ? Math.max(
-          1,
-          ...monthlyData.dailyResults.map((day) => Number(day.mae))
-        )
+      ? Math.max(1, ...monthlyData.dailyResults.map((day) => Number(day.mae)))
       : 1;
 
   return (
@@ -141,9 +136,7 @@ function App() {
       <main className="main-content">
         <header className="topbar">
           <div>
-            <p className="eyebrow">
-              RENEWABLE ENERGY INTELLIGENCE
-            </p>
+            <p className="eyebrow">RENEWABLE ENERGY INTELLIGENCE</p>
 
             <h1>Wind Generation Dashboard</h1>
 
@@ -167,8 +160,8 @@ function App() {
             <h3>Make better-informed purchasing decisions</h3>
 
             <p>
-              Evaluate wind forecasts against actual generation to
-              understand forecast error and potential uncertainty.
+              Evaluate wind forecasts against actual generation to understand
+              forecast error and potential uncertainty.
             </p>
           </div>
         </section>
@@ -181,8 +174,8 @@ function App() {
               <h2>January 2026 monthly evaluation</h2>
 
               <p>
-                Review overall forecast accuracy across the complete
-                January evaluation period.
+                Review overall forecast accuracy across the complete January
+                evaluation period.
               </p>
             </div>
 
@@ -211,8 +204,8 @@ function App() {
 
           {monthlyLoading && (
             <p className="hint">
-              Fetching real data from Elexon for the January dates.
-              This may take a few minutes. Please keep this page open.
+              Fetching real data from Elexon for the January dates. This may
+              take a few minutes. Please keep this page open.
             </p>
           )}
 
@@ -227,9 +220,8 @@ function App() {
             <>
               <p className="hint">
                 Period: {monthlyData.period} · Days evaluated:{" "}
-                {monthlyData.daysEvaluated} of{" "}
-                {monthlyData.daysRequested} · Missing days:{" "}
-                {monthlyData.daysMissing}
+                {monthlyData.daysEvaluated} of {monthlyData.daysRequested} ·
+                Missing days: {monthlyData.daysMissing}
               </p>
 
               <section className="metrics-grid">
@@ -241,22 +233,14 @@ function App() {
 
                 <div className="metric-card">
                   <p>Monthly Mean Bias Error</p>
-                  <h2>
-                    {formatSignedNumber(monthlyData.meanBiasError)}
-                  </h2>
-                  <span>
-                    MW · Positive means overforecast
-                  </span>
+                  <h2>{formatSignedNumber(monthlyData.meanBiasError)}</h2>
+                  <span>MW · Positive means overforecast</span>
                 </div>
 
                 <div className="metric-card">
                   <p>Matched hourly records</p>
-                  <h2>
-                    {Number(monthlyData.matchedHours).toLocaleString()}
-                  </h2>
-                  <span>
-                    Matched forecast and actual pairs
-                  </span>
+                  <h2>{Number(monthlyData.matchedHours).toLocaleString()}</h2>
+                  <span>Matched forecast and actual pairs</span>
                 </div>
               </section>
 
@@ -265,8 +249,8 @@ function App() {
                   <div>
                     <h2>Daily forecast accuracy</h2>
                     <p>
-                      Daily Mean Absolute Error for January 2026.
-                      Shorter bars indicate lower absolute error.
+                      Daily Mean Absolute Error for January 2026. Shorter bars
+                      indicate lower absolute error.
                     </p>
                   </div>
                 </div>
@@ -285,8 +269,7 @@ function App() {
                         key={day.targetDate}
                         style={{
                           display: "grid",
-                          gridTemplateColumns:
-                            "100px minmax(40px, 1fr) 100px",
+                          gridTemplateColumns: "100px minmax(40px, 1fr) 100px",
                           alignItems: "center",
                           gap: "12px",
                         }}
@@ -309,7 +292,7 @@ function App() {
                               height: "100%",
                               width: `${Math.min(
                                 100,
-                                (Number(day.mae) / maximumDailyMae) * 100
+                                (Number(day.mae) / maximumDailyMae) * 100,
                               )}%`,
                               background: "var(--chart-bar, #4387d8)",
                               borderRadius: "5px",
@@ -339,8 +322,8 @@ function App() {
                   <div>
                     <h2>Daily evaluation details</h2>
                     <p>
-                      Forecast publication time and accuracy metrics
-                      for each evaluated day.
+                      Forecast publication time and accuracy metrics for each
+                      evaluated day.
                     </p>
                   </div>
                 </div>
@@ -389,8 +372,8 @@ function App() {
               {monthlyData.missingDays.length > 0 && (
                 <div className="error-message">
                   <strong>
-                    {monthlyData.missingDays.length} date(s) could not
-                    be evaluated
+                    {monthlyData.missingDays.length} date(s) could not be
+                    evaluated
                   </strong>
 
                   <div className="table-wrapper">
@@ -416,13 +399,12 @@ function App() {
               )}
 
               <p className="hint">
-                Methodology: the monthly metrics are calculated across
-                all matched hourly records. Actual wind generation is
-                currently represented by the average of the two
-                half-hourly readings within each hour. Forecast selection
-                uses the assumed 09:50 UTC cutoff on the previous day;
-                this market-rule assumption must be validated before
-                treating the results as definitive.
+                Methodology: the monthly metrics are calculated across all
+                matched hourly records. Actual wind generation is currently
+                represented by the average of the two half-hourly readings
+                within each hour. Forecast selection uses the assumed 09:50 UTC
+                cutoff on the previous day; this market-rule assumption must be
+                validated before treating the results as definitive.
               </p>
             </>
           )}
@@ -436,8 +418,8 @@ function App() {
               <h2>Daily analysis</h2>
 
               <p>
-                Select a delivery date. WindLens selects an eligible
-                forecast automatically.
+                Select a delivery date. WindLens selects an eligible forecast
+                automatically.
               </p>
             </div>
 
@@ -447,15 +429,12 @@ function App() {
           <form onSubmit={loadComparison} className="filter-form">
             <label>
               Target date
-
               <input
                 type="date"
                 value={targetDate}
                 min="2026-01-01"
                 max="2026-01-31"
-                onChange={(event) =>
-                  setTargetDate(event.target.value)
-                }
+                onChange={(event) => setTargetDate(event.target.value)}
                 required
               />
             </label>
@@ -476,9 +455,9 @@ function App() {
           </form>
 
           <p className="hint">
-            Forecast selection currently uses an assumed 09:50 UTC
-            cutoff on the previous day. This assumption must be
-            validated against the applicable market rules.
+            Forecast selection currently uses an assumed 09:50 UTC cutoff on the
+            previous day. This assumption must be validated against the
+            applicable market rules.
           </p>
         </section>
 
@@ -498,8 +477,8 @@ function App() {
             <h2>Your daily analysis starts here</h2>
 
             <p>
-              Choose a date and click Analyse generation to load real
-              data from the Elexon API.
+              Choose a date and click Analyse generation to load real data from
+              the Elexon API.
             </p>
           </section>
         )}
@@ -517,8 +496,7 @@ function App() {
                   </p>
 
                   <p>
-                    Assumed cutoff:{" "}
-                    <strong>{data.assumedCutoff}</strong>
+                    Assumed cutoff: <strong>{data.assumedCutoff}</strong>
                   </p>
                 </div>
               </div>
@@ -550,8 +528,7 @@ function App() {
                   <h2>Forecast vs actual generation</h2>
 
                   <p>
-                    Target date: {data.targetDate} · All timestamps
-                    shown in UTC
+                    Target date: {data.targetDate} · All timestamps shown in UTC
                   </p>
                 </div>
               </div>
@@ -571,11 +548,8 @@ function App() {
                   const maxValue = Math.max(
                     1,
                     ...data.records.map((item) =>
-                      Math.max(
-                        item.forecastGeneration,
-                        item.actualGeneration
-                      )
-                    )
+                      Math.max(item.forecastGeneration, item.actualGeneration),
+                    ),
                   );
 
                   return (
@@ -589,8 +563,7 @@ function App() {
                           className="bar forecast-bar"
                           style={{
                             height: `${
-                              (record.forecastGeneration / maxValue) *
-                              100
+                              (record.forecastGeneration / maxValue) * 100
                             }%`,
                           }}
                         />
@@ -599,8 +572,7 @@ function App() {
                           className="bar actual-bar"
                           style={{
                             height: `${
-                              (record.actualGeneration / maxValue) *
-                              100
+                              (record.actualGeneration / maxValue) * 100
                             }%`,
                           }}
                         />
@@ -618,8 +590,8 @@ function App() {
               </div>
 
               <p className="chart-note">
-                Each bar represents hourly generation in MW. Hover
-                over a bar group to inspect its values.
+                Each bar represents hourly generation in MW. Hover over a bar
+                group to inspect its values.
               </p>
             </section>
 
@@ -627,9 +599,7 @@ function App() {
               <div className="section-heading">
                 <div>
                   <h2>Hourly breakdown</h2>
-                  <p>
-                    Detailed forecast errors for each matched hour.
-                  </p>
+                  <p>Detailed forecast errors for each matched hour.</p>
                 </div>
               </div>
 
@@ -654,13 +624,9 @@ function App() {
                             .slice(11, 16)}
                         </td>
 
-                        <td>
-                          {formatNumber(record.forecastGeneration)}
-                        </td>
+                        <td>{formatNumber(record.forecastGeneration)}</td>
 
-                        <td>
-                          {formatNumber(record.actualGeneration)}
-                        </td>
+                        <td>{formatNumber(record.actualGeneration)}</td>
 
                         <td
                           className={
@@ -674,9 +640,7 @@ function App() {
                           {formatSignedNumber(record.error)}
                         </td>
 
-                        <td>
-                          {formatNumber(record.absoluteError)}
-                        </td>
+                        <td>{formatNumber(record.absoluteError)}</td>
                       </tr>
                     ))}
                   </tbody>
