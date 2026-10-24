@@ -115,7 +115,12 @@ AI-assisted development tools were used during development. The implementation, 
 
 ## Deployment
 
-Deployment URLs will be added after the application is deployed and tested.
+- **Live frontend:** https://windlens-iota.vercel.app/
+- **Backend API:** https://windlens-api.onrender.com
+- **Backend health check:** https://windlens-api.onrender.com/api/health
+- **GitHub repository:** https://github.com/Nid1Korabu/windlens
+
+The deployed frontend connects to the FastAPI backend hosted on Render. The backend may take 50 seconds or more to respond to the first request after a period of inactivity because it uses a free instance.
 
 ## Limitations and Future Improvements
 
@@ -123,4 +128,4 @@ Deployment URLs will be added after the application is deployed and tested.
 - Review the hourly aggregation method against the intended settlement-period methodology.
 - Improve error handling for unavailable or incomplete upstream data.
 - Add automated tests for API responses, calculations, and forecast selection.
-- Deploy the frontend and backend and verify the deployed application end to end.
+- Further validate the deployed application and evaluation results before using them for operational purchasing decisions.
